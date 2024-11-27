@@ -1,29 +1,27 @@
 package com.example.exploraciontareassegundoplano;
 
 import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
-import android.util.Log;
+import android.os.HandlerThread;
 
-public class ExampleHandlerThread extends Thread{
+public class ExampleHandlerThread extends HandlerThread {
 
-    private static final String TAG = "ExampleHandlerThread";
+    public Handler handler;
 
-    Handler handler;
+    public ExampleHandlerThread(String name) {
+        super(name);
+    }
 
     @Override
-    public void run(){
+    protected void onLooperPrepared() {
+        super.onLooperPrepared();
+        handler = new Handler(getLooper()); // Asigna un Handler al Looper
+    }
 
-        Looper.prepare();
-        handler = new Handler();
-
-        Looper.loop();
-
-//        for (int i =0; i < 5; i++){
-//            Log.d(TAG, "run> " + i);
-//            SystemClock.sleep(1000);
-//
-//        }
-        Log.d(TAG, "Final de la Tarea");
+    @Override
+    public boolean quit() {
+        if (getLooper() != null) {
+            getLooper().quitSafely(); // Finaliza el Looper de forma segura
+        }
+        return true;
     }
 }
