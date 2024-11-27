@@ -1,5 +1,6 @@
 package com.example.exploraciontareassegundoplano;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -11,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private Button btnStart, btnStop, btnTareaA, btnTareaB;
+    private Button btnStart, btnStop, btnTareaA, btnTareaB, btnSecondActivity;
     private ExampleHandlerThread exampleHandlerThread;
 
     @Override
@@ -24,13 +25,16 @@ public class MainActivity extends AppCompatActivity {
         btnStop = findViewById(R.id.btnStop);
         btnTareaA = findViewById(R.id.btnTareaA);
         btnTareaB = findViewById(R.id.btnTareaB);
+        btnSecondActivity = findViewById(R.id.btnSecondActivity);
+
 
         // Inicializar el HandlerThread
         exampleHandlerThread = new ExampleHandlerThread("ExampleHandlerThread");
 
         // Botón para iniciar el hilo
         btnStart.setOnClickListener(view -> {
-            if (!exampleHandlerThread.isAlive()) {
+            if (exampleHandlerThread == null || !exampleHandlerThread.isAlive()) {
+                exampleHandlerThread = new ExampleHandlerThread("ExampleHandlerThread"); // Crear una nueva instancia
                 exampleHandlerThread.start();
                 Log.d(TAG, "HandlerThread iniciado.");
             } else {
@@ -74,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.e(TAG, "HandlerThread no está inicializado o no está en ejecución.");
             }
+        });
+
+        btnSecondActivity.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            startActivity(intent);
         });
     }
 
